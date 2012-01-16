@@ -134,10 +134,6 @@ if has("autocmd")
       \ endif
 endif " has("autocmd")
 
-" F5编译和运行C程序，F6编译和运行C++程序
-" 请注意，下述代码在windows下使用会报错
-" 需要去掉./这两个字符
-
 " C的编译和运行
 map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
@@ -145,14 +141,8 @@ exec "w"
 exec "!gcc % -o %<"
 exec "! ./%<"
 endfunc
-
-" C++的编译和运行
-map <F6> :call CompileRunGpp()<CR>
-func! CompileRunGpp()
-exec "w"
-exec "!g++ % -o %<"
-exec "! ./%<"
-endfunc
+"python 运行
+map <F6> :!python %
 
 " 能够漂亮地显示.NFO文件
 set encoding=utf-8
