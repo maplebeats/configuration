@@ -142,7 +142,7 @@ exec "!gcc % -o %<"
 exec "! ./%<"
 endfunc
 "python 运行
-map <F6> :!python %
+map <F6> :!python % <CR>
 
 " 能够漂亮地显示.NFO文件
 set encoding=utf-8
