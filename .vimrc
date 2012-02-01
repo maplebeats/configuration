@@ -166,3 +166,5 @@ set foldenable
 set foldmethod=manual
 nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+
