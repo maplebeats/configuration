@@ -4,7 +4,7 @@
 
 pkgname=nvidia-bumblebee
 pkgver=295.59
-_extramodules=extramodules-3.4-ARCH
+_extramodules=extramodules-3.4-ck
 pkgrel=1
 pkgdesc="NVIDIA drivers for linux. Packaged for Bumblebee"
 arch=('i686' 'x86_64')
