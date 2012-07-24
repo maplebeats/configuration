@@ -69,7 +69,7 @@ layouts =
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.a
-tags_name = { 1, 2, 3, 4, "5娱乐", "6终端", "7网页", "8聊天", "9编程", "0扯淡"}
+tags_name = { 1, 2, 3, 4, "5娱乐", "6聊天", "7网页", "8终端", "9编程", "扯淡"}
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
@@ -87,12 +87,15 @@ myawesomemenu = {
 powermenu = { 
     {"关机","dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop"},
     {"重启","dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager  org.freedesktop.ConsoleKit.Manager.Restart"},
-    {"挂起","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend"},{"休眠","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower  org.freedesktop.UPower.Hibernate"}
+    {"挂起","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend"},
+    {"休眠","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower  org.freedesktop.UPower.Hibernate"}
 }
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "应用(&A)", xdgmenu },
-                                    { "终端(&T)", terminal },
+                                    { "应用", xdgmenu },
                                     { "浏览器", browser },
+                                    { "推特" , "hotot-gtk3" },
+                                    { "文件管理", "thunar" },
+                                    { "reader", "lightread"},
                                     { "聊天", "pidgin"},
                                     { "视频", "smplayer"},
                                     { "音乐", "osdlyrics"},
@@ -289,7 +292,9 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Standard program
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey,           }, "Return", function () 
+                                                   awful.util.spawn(terminal)
+                                                end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -314,15 +319,18 @@ globalkeys = awful.util.table.join(
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end),
-  -- {{3 音量
+    -- {{3 音量
     awful.key({ }, 'XF86AudioRaiseVolume', function () volume("up", tb_volume) end),
     awful.key({ }, 'XF86AudioLowerVolume', function () volume("down", tb_volume) end),
-    awful.key({ }, 'XF86AudioMute', function () volume("mute", tb_volume) end)
+    awful.key({ }, 'XF86AudioMute', function () volume("mute", tb_volume) end),
+    --截图
+    awful.key({ }, "Print", function () awful.util.spawn("deepin-screenshot 2>/dev/null") end)
 )
 
 clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
-    awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end),
+    awful.key({ modkey,           }, "c",      function (c) c:kill()                         end),
+    awful.key({ "Mod1",           }, "F4",     function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
@@ -398,8 +406,36 @@ awful.rules.rules = {
                      focus = true,
                      keys = clientkeys,
                      buttons = clientbuttons } },
-    { rule = { class = "MPlayer" },
-      properties = { floating = true } },
+    --娱乐
+    { rule = { class = "Smplayer" },
+      properties = { tag = tags[1][5] , switchtotag = true , floating = true } },
+    { rule = { class = "Mplayer"},
+      properties = { tag =tags[1][5], floating = true } },
+    { rule = { class = "Rhythmbox" },
+      properties = { tag = tags[1][5] , floating = true } },
+    { rule = { class = "Audacious" },
+      properties = { tag = tags[1][5] , switchtotag = true ,floating = true } },
+    --聊天
+    { rule = { class = "Pidgin" },
+      properties = { tag = tags[1][6] } },
+    { rule = { class = "Hotot" },
+      properties = { tag = tags[1][6] ,switchtotag = true } },
+    { rule = { class = "Thunderbird" },
+      properties = { tag = tags[1][6] } },
+    { rule = { class = "Skype" },
+      properties = { tag = tags[1][6] , floating = true } },
+    --终端
+    { rule = { class = "Terminal" },
+      properties = { tag = tags[1][8] , switchtotag = true } },
+    --网页
+    { rule = { class = "Chromium" },
+      properties = { tag= tags[1][7] , switchtotag = true } },
+    --编程
+    { rule = { class = "Gvim" },
+      properties = { tag = tags[1][9] , switchtotag = true } },
+    { rule = { class = "Qt-creator"},
+      properties = { tag = tags[1][9] } },
+    --扯淡
     { rule = { class = "pinentry" },
       properties = { floating = true } },
     { rule = { class = "gimp" },
@@ -409,6 +445,21 @@ awful.rules.rules = {
     --   properties = { tag = tags[1][2] } },
 }
 -- }}}
+
+-- Autorun programs
+autorun = false
+autorunApps = 
+{ 
+    "nm-applet",
+    "pidgin",
+    "thunderbird",
+}
+
+if autorun then
+    for app = 1, #autorunApps do
+        awful.util.spawn_with_shell(autorunApps[app])
+    end
+end
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.

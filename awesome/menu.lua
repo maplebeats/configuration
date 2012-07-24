@@ -17,6 +17,7 @@
      {"Avahi VNC Server Browser", "/usr/bin/bvnc", "/usr/share//icons/gnome/16x16/devices/network-wired.png" },
      {"Chromium", "chromium ", "/usr/share//icons/hicolor/16x16/apps/chromium.png" },
      {"Dropbox", "/opt/dropbox/dropboxd", "/usr/share/pixmaps/dropbox.png" },
+     {"Firefox", "firefox ", "/usr/share//icons/hicolor/16x16/apps/firefox.png" },
      {"Hotot Gtk3", "hotot-gtk3", "/usr/share//icons/hicolor/22x22/apps/hotot.png" },
      {"Pidgin Internet Messenger", "pidgin", "/usr/share//icons/hicolor/16x16/apps/pidgin.png" },
      {"Skype", "skype", "/usr/share//icons/hicolor/16x16/apps/skype.png" },
@@ -33,7 +34,8 @@
      {"Qt-Creator", "/usr/bin/qtcreator", "///usr/share/icons/hicolor/128x128/apps/qtcreator.png" },
  }
 
- menu52dd1c847264a75f400961bfb4d1c849 = {     {"EasyTAG", "easytag ", "/usr/share/pixmaps/EasyTAG_icon.xpm" },
+ menu52dd1c847264a75f400961bfb4d1c849 = {     {"Audacious", "audacious ", "/usr/share//icons/hicolor/48x48/apps/audacious.png" },
+     {"EasyTAG", "easytag ", "/usr/share/pixmaps/EasyTAG_icon.xpm" },
      {"Movie Player", "totem ", "/usr/share//icons/hicolor/16x16/apps/totem.png" },
      {"OSD Lyrics", "osdlyrics", "/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
      {"QT V4L2 test Utility", "qv4l2", "/usr/share//icons/hicolor/16x16/apps/qv4l2.png" },

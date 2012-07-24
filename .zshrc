@@ -1,13 +1,15 @@
-PROMPT='%{[32m%}%/'
-PROMPT='%{[31m%}>>>%{[m%}'
+PROMPT='%{[31m%}ef>%{[m%}'
 
 case $TERM in
 (xterm*)
-function precmd () { print -Pn "\e]0;pwd:%~\a" }
+function precmd () { print -Pn "\e]0;%~\a" }
 ;;
 esac
 
-export PATH=$PATH:~/Scripts:~/.gem/ruby/1.9.1/bin
+[[ ! -o login ]] && source /etc/zsh/zprofile
+
+export PATH=$PATH:/home/maplebeats/Scripts:/home/maplebeats/.gem/ruby/1.9.1/bin
+export EDITOR="vim"
 
 # number of lines kept in history
 export HISTSIZE=10000
@@ -74,13 +76,9 @@ zstyle ':completion:*:messages' format $'\e[01;35m -- %d --\e[0m'
 zstyle ':completion:*:warnings' format $'\e[01;31m -- No Matches Found --\e[0m'
 
 #alias
+alias rm='rm -i'
 alias ls='ls -F --color=auto'
 alias ll='ls -l'
 alias grep='grep --color=auto'
-alias p-s='sudo pacman -S'
-alias y-s='sudo yaourt -S'
-alias p-ss='pacman -Ss'
-alias y-ss='yaourt -Ss'
-alias works="cd /home/maplebeats/Works/"
-alias blog="cd /home/maplebeats/Works/maplebeats.github.com/"
 alias git-c="git commit -a -m"
+alias menu="xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu > ~/.config/awesome/menu.lua && sed -i 's/svg/png/' ~/.config/awesome/menu.lua"
