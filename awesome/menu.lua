@@ -1,4 +1,5 @@
- menu98edb85b00d9527ad5acebe451b3fae6 = {     {"Archive Manager", "file-roller ", "/usr/share//icons/hicolor/16x16/apps/file-roller.png" },
+ menu98edb85b00d9527ad5acebe451b3fae6 = {     {"7-Zip FM", "7zFM", "/usr/share//icons/hicolor/32x32/apps/p7zip.png" },
+     {"Archive Manager", "file-roller ", "/usr/share//icons/hicolor/16x16/apps/file-roller.png" },
      {"CherryTree", "cherrytree ", "///usr/share/icons/hicolor/scalable/apps/cherrytree.png" },
      {"Disks", "palimpsest", "/usr/share//icons/hicolor/16x16/apps/palimpsest.png" },
      {"Leafpad", "leafpad ", "/usr/share//icons/hicolor/16x16/apps/leafpad.png" },
@@ -11,12 +12,14 @@
  }
 
  menud334dfcea59127bedfcdbe0a3ee7f494 = {     {"GNU Image Manipulation Program", "gimp-2.8 ", "/usr/share//icons/hicolor/16x16/apps/gimp.png" },
+     {"gThumb", "gthumb ", "/usr/share//icons/hicolor/16x16/apps/gthumb.png" },
  }
 
  menuc8205c7636e728d448c2774e6a4a944b = {     {"Avahi SSH Server Browser", "/usr/bin/bssh", "/usr/share//icons/gnome/16x16/devices/network-wired.png" },
      {"Avahi VNC Server Browser", "/usr/bin/bvnc", "/usr/share//icons/gnome/16x16/devices/network-wired.png" },
      {"Chromium", "chromium ", "/usr/share//icons/hicolor/16x16/apps/chromium.png" },
      {"Dropbox", "/opt/dropbox/dropboxd", "/usr/share/pixmaps/dropbox.png" },
+     {"FileZilla", "filezilla", "/usr/share//icons/hicolor/16x16/apps/filezilla.png" },
      {"Firefox", "firefox ", "/usr/share//icons/hicolor/16x16/apps/firefox.png" },
      {"Hotot Gtk3", "hotot-gtk3", "/usr/share//icons/hicolor/22x22/apps/hotot.png" },
      {"Pidgin Internet Messenger", "pidgin", "/usr/share//icons/hicolor/16x16/apps/pidgin.png" },
@@ -38,9 +41,11 @@
      {"EasyTAG", "easytag ", "/usr/share/pixmaps/EasyTAG_icon.xpm" },
      {"Movie Player", "totem ", "/usr/share//icons/hicolor/16x16/apps/totem.png" },
      {"OSD Lyrics", "osdlyrics", "/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
+     {"PulseAudio Volume Control", "pavucontrol", "/usr/share//icons/gnome/16x16/apps/multimedia-volume-control.png" },
      {"QT V4L2 test Utility", "qv4l2", "/usr/share//icons/hicolor/16x16/apps/qv4l2.png" },
      {"Rhythmbox", "rhythmbox ", "/usr/share//icons/hicolor/16x16/apps/rhythmbox.png" },
      {"SMPlayer", "smplayer ", "/usr/share//icons/hicolor/16x16/apps/smplayer.png" },
+     {"VLC media player", "/usr/bin/vlc ", "/usr/share//icons/hicolor/16x16/apps/vlc.png" },
  }
 
  menuee69799670a33f75d45c57d1d1cd0ab3 = {     {"Avahi Zeroconf Browser", "/usr/bin/avahi-discover", "/usr/share//icons/gnome/16x16/devices/network-wired.png" },

@@ -59,21 +59,38 @@ layouts =
     awful.layout.suit.tile.top,
     awful.layout.suit.fair,
     awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
+    --awful.layout.suit.spiral,
+    --awful.layout.suit.spiral.dwindle,
+    --awful.layout.suit.max,
+    --awful.layout.suit.max.fullscreen,
     awful.layout.suit.magnifier
 }
 -- }}}
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.a
-tags_name = { 1, 2, 3, 4, "5娱乐", "6聊天", "7网页", "8终端", "9编程", "扯淡"}
+tags_name = { 1, 2, 3, 4, "5娱乐", "6聊天", "7网页", "8编辑", "9终端", "扯淡"}
+tags_layout = {
+  awful.layout.suit.tile,
+  awful.layout.suit.tile,
+  awful.layout.suit.tile,
+  awful.layout.suit.tile,
+  awful.layout.suit.tile,
+  awful.layout.suit.tile,
+  awful.layout.suit.tile,
+  awful.layout.suit.tile,
+  awful.layout.suit.tile,
+  awful.layout.suit.floating,
+}
 tags = {}
+revtags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag( tags_name, s, layouts[1])
+    tags[s] = awful.tag( tags_name, s, tags_layout)
+    revtags[s] = {}
+    for i, t in ipairs(tags[s]) do
+    revtags[s][t] = i
+    end
 end
 -- }}}
 
@@ -85,21 +102,27 @@ myawesomemenu = {
    { "注销", awesome.quit }
 }
 powermenu = { 
-    {"关机","dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop"},
-    {"重启","dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager  org.freedesktop.ConsoleKit.Manager.Restart"},
-    {"挂起","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend"},
+    {"关机(&D)","dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop"},
+    {"重启(&R)","dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager  org.freedesktop.ConsoleKit.Manager.Restart"},
+    {"挂起(&S)","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend"},
     {"休眠","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower  org.freedesktop.UPower.Hibernate"}
 }
 mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "应用", xdgmenu },
-                                    { "浏览器", browser },
-                                    { "推特" , "hotot-gtk3" },
-                                    { "文件管理", "thunar" },
-                                    { "reader", "lightread"},
-                                    { "聊天", "pidgin"},
-                                    { "视频", "smplayer"},
-                                    { "音乐", "osdlyrics"},
-                                    { "电源", powermenu}
+                                    { "应用(&M)", xdgmenu },
+                                    { "浏览器(&B)", browser ,"/usr/share//icons/hicolor/16x16/apps/chromium.png" },
+                                    { "推特(&H)" , "hotot-gtk3","/usr/share//icons/hicolor/22x22/apps/hotot.png" },
+                                    { "&GoldenDict", "goldendict", "///usr/share/pixmaps/goldendict.png" },
+                                    { "&Firefox", "firefox ", "/usr/share//icons/hicolor/16x16/apps/firefox.png" },
+                                    { "文件管理(&T)", "thunar","/usr/share//icons/hicolor/16x16/apps/Thunar.png" },
+                                    { "reader(&R)", "lightread","///usr/share/lightread/media/lightread.png" },
+                                    { "&VIM", "gvim -f ", "/usr/share/pixmaps/gvim.png" },
+                                    { "聊天", "pidgin","/usr/share//icons/hicolor/16x16/apps/pidgin.png" },
+                                    { "视频(&S)", "smplayer","/usr/share//icons/hicolor/16x16/apps/smplayer.png" },
+                                    { "音乐(&A)", "osdlyrics","/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
+                                    { "Thunderbird", "thunderbird ", "/usr/share//icons/hicolor/16x16/apps/thunderbird.png" },
+                                    { "&CherryTree", "cherrytree ", "///usr/share/icons/hicolor/scalable/apps/cherrytree.png" },
+                                    { "&VLC", "/usr/bin/vlc ", "/usr/share//icons/hicolor/16x16/apps/vlc.png" },
+                                    { "电源(&P)", powermenu}
                                   }
                         })
 
@@ -112,37 +135,37 @@ function volume (mode, widget)
   cardid  = 0
   channel = "Master"
   if mode == "update" then
-    -- local volume = io.popen("pamixer --get-volume"):read("*all")
-    local fd = io.popen("amixer -c " .. cardid .. " -- sget " .. channel)
-    local status = fd:read("*all")
-    fd:close()
-    local volume = string.match(status, "(%d?%d?%d)%%")
+    local volume = io.popen("pamixer --get-volume"):read("*all")
+    --local fd = io.popen("amixer -c " .. cardid .. " -- sget " .. channel)
+    --local status = fd:read("*all")
+    --fd:close()
+    --local volume = string.match(status, "(%d?%d?%d)%%")
     volume = string.format("% 3d", volume)
 
-    --local muted = io.popen("pamixer --get-mute"):read("*all")
-    status = string.match(status, "%[(o[^%]]*)%]")
-    if string.find(status, "on", 1, true) then
- 	    volume = '♫' .. volume .. "%"
-    else
- 	    volume = '♫' .. volume .. "<span color='red'>M</span>"
-    end
-    --if muted == "false" then
-    --  volume = '♫' .. volume .. "%"
+    local muted = io.popen("pamixer --get-mute"):read("*all")
+    --status = string.match(status, "%[(o[^%]]*)%]")
+    --if string.find(status, "on", 1, true) then
+ 	--    volume = '♫' .. volume .. "%"
     --else
-    --  volume = '♫' .. volume .. "<span color='red'>M</span>"
+ 	--    volume = '♫' .. volume .. "<span color='red'>M</span>"
     --end
+    if muted == "false" then
+      volume = '♫' .. volume .. "%"
+    else
+      volume = '♫' .. volume .. "<span color='red'>M</span>"
+    end
     widget.text = volume
   elseif mode == "up" then
-    --io.popen("pamixer --increase 5"):read("*all")
-    io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%+"):read("*all")
+    io.popen("pamixer --increase 5"):read("*all")
+    --io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%+"):read("*all")
     volume("update", widget)
   elseif mode == "down" then
-    --io.popen("pamixer --decrease 5"):read("*all")
-    io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%-"):read("*all")
+    io.popen("pamixer --decrease 5"):read("*all")
+    --io.popen("amixer -q -c " .. cardid .. " sset " .. channel .. " 5%-"):read("*all")
     volume("update", widget)
   else
-    --io.popen("pamixer --toggle-mute"):read("*all")
-    io.popen("amixer -c " .. cardid .. " sset " .. channel .. " toggle"):read("*all")
+    io.popen("pamixer --toggle-mute"):read("*all")
+    --io.popen("amixer -c " .. cardid .. " sset " .. channel .. " toggle"):read("*all")
     volume("update", widget)
   end
 end
@@ -159,6 +182,11 @@ tb_volume:buttons(awful.util.table.join(
   awful.button({ }, 1, function () volume("mute", tb_volume) end)
 ))
 volume("update", tb_volume)
+
+--Caps Lock attention
+--function check_capslock(mode, widget)
+        
+caps_lock = widget({ type = "textbox", name = "caps_lock" ,align = "right" })
 
 -- {{{ Wibox
 -- Create a textclock widget
@@ -324,10 +352,11 @@ globalkeys = awful.util.table.join(
     awful.key({ }, 'XF86AudioLowerVolume', function () volume("down", tb_volume) end),
     awful.key({ }, 'XF86AudioMute', function () volume("mute", tb_volume) end),
     --截图
-    awful.key({ }, "Print", function () awful.util.spawn("deepin-screenshot 2>/dev/null") end)
+    awful.key({ }, "Print", function () awful.util.spawn("scrot '%m-%d-%s_%wx%h.png' -e 'mv $f ~/Pictures/' ") end)
 )
 
 clientkeys = awful.util.table.join(
+    awful.key({ modkey,           }, "a",    function (c) c.above = not c.above    end),
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey,           }, "c",      function (c) c:kill()                         end),
     awful.key({ "Mod1",           }, "F4",     function (c) c:kill()                         end),
@@ -407,34 +436,38 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons } },
     --娱乐
-    { rule = { class = "Smplayer" },
-      properties = { tag = tags[1][5] , switchtotag = true , floating = true } },
+    { rule = { class = "Smplayer" },callback = awful.placement.centered,
+      properties = { tag = tags[1][5] , switchtotag = true } },
     { rule = { class = "Mplayer"},
-      properties = { tag =tags[1][5], floating = true } },
+      properties = { tag =tags[1][5], floating = false } },
     { rule = { class = "Rhythmbox" },
       properties = { tag = tags[1][5] , floating = true } },
     { rule = { class = "Audacious" },
-      properties = { tag = tags[1][5] , switchtotag = true ,floating = true } },
+      properties = { tag = tags[1][5] ,floating = true } },
+    { rule = { class = "Vlc" },
+      properties = { tag = tags[1][5] , switchtotag = true } },
     --聊天
     { rule = { class = "Pidgin" },
       properties = { tag = tags[1][6] } },
     { rule = { class = "Hotot" },
       properties = { tag = tags[1][6] ,switchtotag = true } },
     { rule = { class = "Thunderbird" },
-      properties = { tag = tags[1][6] } },
+      properties = { tag = tags[1][4] } },
     { rule = { class = "Skype" },
       properties = { tag = tags[1][6] , floating = true } },
     --终端
-    { rule = { class = "Terminal" },
-      properties = { tag = tags[1][8] , switchtotag = true } },
+    --{ rule = { class = "Terminal" },
+     -- properties = { tag = tags[1][8] , switchtotag = true } },
     --网页
     { rule = { class = "Chromium" },
-      properties = { tag= tags[1][7] , switchtotag = true } },
-    --编程
+      properties = { tag= tags[1][7] , switchtotag = true ,floating = true} },
+    { rule = { class = "Firefox" },
+      properties = { tag = tags[1][7] , floating=true } },
+   --编程
     { rule = { class = "Gvim" },
-      properties = { tag = tags[1][9] , switchtotag = true } },
+      properties = { tag = tags[1][8] , switchtotag = true } },
     { rule = { class = "Qt-creator"},
-      properties = { tag = tags[1][9] } },
+      properties = { tag = tags[1][8] } },
     --扯淡
     { rule = { class = "pinentry" },
       properties = { floating = true } },
@@ -447,12 +480,13 @@ awful.rules.rules = {
 -- }}}
 
 -- Autorun programs
-autorun = false
+autorun = true
 autorunApps = 
 { 
-    "nm-applet",
-    "pidgin",
-    "thunderbird",
+    "dbus-launch --exit-with-session xfce4-power-manager",
+    "firefox",
+    "proxy.sh",
+    "pidgin"
 }
 
 if autorun then
@@ -488,6 +522,12 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+client.add_signal("focus", function(c)
+                               c.border_color = beautiful.border_focus
+                               c.opacity = 1
+                           end)
+client.add_signal("unfocus", function(c) 
+                                 c.border_color = beautiful.border_normal 
+                                 c.opacity = 1
+                             end)
 -- }}}
