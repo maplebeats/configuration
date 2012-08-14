@@ -8,6 +8,8 @@ require("beautiful")
 require("naughty")
 -- Menu
 require("menu")
+--libs
+require("lib")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -121,7 +123,7 @@ mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesom
                                     { "音乐(&A)", "osdlyrics","/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
                                     { "Thunderbird", "thunderbird ", "/usr/share//icons/hicolor/16x16/apps/thunderbird.png" },
                                     { "&CherryTree", "cherrytree ", "///usr/share/icons/hicolor/scalable/apps/cherrytree.png" },
-                                    { "&VLC", "/usr/bin/vlc ", "/usr/share//icons/hicolor/16x16/apps/vlc.png" },
+                                    { "&XBMC", "xbmc", "/usr/share//icons/hicolor/48x48/apps/xbmc.png" },
                                     { "电源(&P)", powermenu}
                                   }
                         })
@@ -320,9 +322,15 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Standard program
+        -- 找一个终端来XX
     awful.key({ modkey,           }, "Return", function () 
-                                                   awful.util.spawn(terminal)
-                                                end),
+            lib.run_or_raise("terminal --role=TempTerm --geometry=80x24+343+180", { role = "TempTerm" })
+            end),
+        -- 普通终端
+    awful.key({ modkey,           }, "t", function ()
+            awful.util.spawn(terminal)
+            end),
+
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
@@ -347,12 +355,50 @@ globalkeys = awful.util.table.join(
                   awful.util.eval, nil,
                   awful.util.getdir("cache") .. "/history_eval")
               end),
+
     -- {{3 音量
     awful.key({ }, 'XF86AudioRaiseVolume', function () volume("up", tb_volume) end),
     awful.key({ }, 'XF86AudioLowerVolume', function () volume("down", tb_volume) end),
     awful.key({ }, 'XF86AudioMute', function () volume("mute", tb_volume) end),
     --截图
-    awful.key({ }, "Print", function () awful.util.spawn("scrot '%m-%d-%s_%wx%h.png' -e 'mv $f ~/Pictures/' ") end)
+    awful.key({ }, "Print", function () 
+            awful.util.spawn("scrot '%m-%d-%s_%w.png' -e 'mv $f ~/Pictures/' ")
+            os.execute("sleep .5")
+            naughty.notify({title="截图", text="全屏截图已保存。"})
+            end),
+    -- {{{3 sdcv,活该过不了四级
+    awful.key({ modkey }, "d", function ()
+    local f = io.popen("xsel -p")
+    local new_word = f:read("*a")
+    f:close()
+
+    if frame ~= nil then
+      naughty.destroy(frame)
+      frame = nil
+      if old_word == new_word then
+      return
+      end
+    end
+    old_word = new_word
+
+    local fc = ""
+    local f = io.popen("sdcv -n --utf8-output '"..new_word.."'")
+    for line in f:lines() do
+      fc = fc .. line .. '\n'
+    end
+    f:close()
+    frame = naughty.notify({ text = fc, timeout = 5, width = 320 })
+    end),
+    --无线键盘多媒体按键
+        --切换fx
+    awful.key({ }, 'XF86HomePage', function () 
+            lib.run_or_raise("firefox", { name="Vimperator" }) 
+            end),
+    awful.key({ }, 'XF86Mail', function ()
+            awful.tag.viewonly(tags[1][4])
+            awful.util.spawn("thunderbird") 
+            end),
+    awful.key({ }, 'XF86Calculator', function () awful.util.spawn("gvim -f") end)
 )
 
 clientkeys = awful.util.table.join(
@@ -453,15 +499,17 @@ awful.rules.rules = {
       properties = { tag = tags[1][6] ,switchtotag = true } },
     { rule = { class = "Thunderbird" },
       properties = { tag = tags[1][4] } },
+    { rule = { class = "Lightread" },
+      properties = { tag = tags[1][4] } },
     { rule = { class = "Skype" },
       properties = { tag = tags[1][6] , floating = true } },
     --终端
-    --{ rule = { class = "Terminal" },
-     -- properties = { tag = tags[1][8] , switchtotag = true } },
+    { rule = { class = "Terminal" },
+       properties = { tag = tags[1][9] , switchtotag = true } },
     --网页
     { rule = { class = "Chromium" },
       properties = { tag= tags[1][7] , switchtotag = true ,floating = true} },
-    { rule = { class = "Firefox" },
+    { rule = { class = "Firefox"},
       properties = { tag = tags[1][7] , floating=true } },
    --编程
     { rule = { class = "Gvim" },
@@ -483,10 +531,10 @@ awful.rules.rules = {
 autorun = true
 autorunApps = 
 { 
-    "dbus-launch --exit-with-session xfce4-power-manager",
-    "firefox",
-    "proxy.sh",
-    "pidgin"
+    "fcitx",
+    "dropboxd",
+    "xfce4-power-manager",
+    "proxy.sh"
 }
 
 if autorun then

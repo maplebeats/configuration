@@ -8,7 +8,7 @@ esac
 
 [[ ! -o login ]] && source /etc/zsh/zprofile
 
-export PATH=$PATH:/home/maplebeats/Scripts:/home/maplebeats/.gem/ruby/1.9.1/bin
+export PATH=$PATH:/home/maplebeats/Scripts:/home/maplebeats/.gem/ruby/1.9.1/bin:/usr/share/perl5/core_perl/:/usr/share/perl5/vendor_perl/
 export EDITOR="vim"
 
 # number of lines kept in history
@@ -82,3 +82,4 @@ alias ll='ls -l'
 alias grep='grep --color=auto'
 alias git-c="git commit -a -m"
 alias menu="xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu > ~/.config/awesome/menu.lua && sed -i 's/svg/png/' ~/.config/awesome/menu.lua"
+alias sys='systemctl'

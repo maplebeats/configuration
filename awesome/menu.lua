@@ -46,6 +46,7 @@
      {"Rhythmbox", "rhythmbox ", "/usr/share//icons/hicolor/16x16/apps/rhythmbox.png" },
      {"SMPlayer", "smplayer ", "/usr/share//icons/hicolor/16x16/apps/smplayer.png" },
      {"VLC media player", "/usr/bin/vlc ", "/usr/share//icons/hicolor/16x16/apps/vlc.png" },
+     {"XBMC Media Center", "xbmc", "/usr/share//icons/hicolor/48x48/apps/xbmc.png" },
  }
 
  menuee69799670a33f75d45c57d1d1cd0ab3 = {     {"Avahi Zeroconf Browser", "/usr/bin/avahi-discover", "/usr/share//icons/gnome/16x16/devices/network-wired.png" },
