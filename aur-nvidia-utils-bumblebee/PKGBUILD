@@ -4,7 +4,7 @@
 # Contributor: James Rayner <iphitus@gmail.com>
 
 pkgname=nvidia-utils-bumblebee
-pkgver=295.59
+pkgver=295.71
 pkgrel=1
 arch=('i686' 'x86_64')
 url="http://www.nvidia.com/"
@@ -19,8 +19,8 @@ options=('!strip')
 
 _arch='x86_64'
 _pkg="NVIDIA-Linux-${_arch}-${pkgver}-no-compat32"
-source=("NVIDIA-Linux-x86_64-295.59-no-compat32.run")
-md5sums=('864d5dd1a29cb303bd355707413e2b98')
+source=("NVIDIA-Linux-x86_64-295.71-no-compat32.run")
+md5sums=('820a6fc65e0eecf8e6f3ae7a0b96fc4f')
 
 create_links() {
     # create soname links
