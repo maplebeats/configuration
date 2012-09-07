@@ -109,20 +109,21 @@ powermenu = {
     {"挂起(&S)","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend"},
     {"休眠","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower  org.freedesktop.UPower.Hibernate"}
 }
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesome_icon },
                                     { "应用(&M)", xdgmenu },
-                                    { "浏览器(&B)", browser ,"/usr/share//icons/hicolor/16x16/apps/chromium.png" },
-                                    { "推特(&H)" , "hotot-gtk3","/usr/share//icons/hicolor/22x22/apps/hotot.png" },
+                                    { "Chromium", browser ,"/usr/share//icons/hicolor/16x16/apps/chromium.png" },
+                                    { "Thunderbird", "thunderbird ", "/usr/share//icons/hicolor/16x16/apps/thunderbird.png" },
+                                    { "Pidgin", "pidgin","/usr/share//icons/hicolor/16x16/apps/pidgin.png" },
+                                    { "&hotot" , "hotot-gtk3","/usr/share//icons/hicolor/22x22/apps/hotot.png" },
                                     { "&GoldenDict", "goldendict", "///usr/share/pixmaps/goldendict.png" },
                                     { "&Firefox", "firefox ", "/usr/share//icons/hicolor/16x16/apps/firefox.png" },
-                                    { "文件管理(&T)", "thunar","/usr/share//icons/hicolor/16x16/apps/Thunar.png" },
-                                    { "reader(&R)", "lightread","///usr/share/lightread/media/lightread.png" },
+                                    { "&Thunar", "thunar","/usr/share//icons/hicolor/16x16/apps/Thunar.png" },
+                                    { "&Lightread", "lightread","///usr/share/lightread/media/lightread.png" },
                                     { "&VIM", "gvim -f ", "/usr/share/pixmaps/gvim.png" },
-                                    { "聊天", "pidgin","/usr/share//icons/hicolor/16x16/apps/pidgin.png" },
-                                    { "视频(&S)", "smplayer","/usr/share//icons/hicolor/16x16/apps/smplayer.png" },
-                                    { "音乐(&A)", "osdlyrics","/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
-                                    { "Thunderbird", "thunderbird ", "/usr/share//icons/hicolor/16x16/apps/thunderbird.png" },
+                                    { "&Smplayer", "smplayer","/usr/share//icons/hicolor/16x16/apps/smplayer.png" },
+                                    { "&Osd", "osdlyrics","/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
                                     { "&CherryTree", "cherrytree ", "///usr/share/icons/hicolor/scalable/apps/cherrytree.png" },
+                                    { "&Eric 5", "eric5", "/usr/share/pixmaps/eric.png" },
                                     { "&XBMC", "xbmc", "/usr/share//icons/hicolor/48x48/apps/xbmc.png" },
                                     { "电源(&P)", powermenu}
                                   }
@@ -283,9 +284,9 @@ end
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, 3, function () mymainmenu:toggle() end)
+    --awful.button({ }, 4, awful.tag.viewnext),
+    --awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -324,12 +325,12 @@ globalkeys = awful.util.table.join(
     -- Standard program
         -- 找一个终端来XX
     awful.key({ modkey,           }, "Return", function () 
-            lib.run_or_raise("terminal --role=TempTerm --geometry=80x24+343+180", { role = "TempTerm" })
+            lib.run_or_raise("terminal --role=TempTerm", { role = "TempTerm" })
             end),
         -- 普通终端
-    awful.key({ modkey,           }, "t", function ()
-            awful.util.spawn(terminal)
-            end),
+    --awful.key({ modkey,           }, "t", function ()
+   --       awful.util.spawn(terminal)
+  --        end),
 
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
@@ -405,7 +406,7 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey,           }, "a",    function (c) c.above = not c.above    end),
     awful.key({ modkey,           }, "f",      function (c) c.fullscreen = not c.fullscreen  end),
     awful.key({ modkey,           }, "c",      function (c) c:kill()                         end),
-    awful.key({ "Mod1",           }, "F4",     function (c) c:kill()                         end),
+    --awful.key({ "Mod1",           }, "F4",     function (c) c:kill()                         end),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
@@ -496,7 +497,7 @@ awful.rules.rules = {
     { rule = { class = "Pidgin" },
       properties = { tag = tags[1][6] } },
     { rule = { class = "Hotot" },
-      properties = { tag = tags[1][6] ,switchtotag = true } },
+      properties = { tag = tags[1][3] ,switchtotag = true } },
     { rule = { class = "Thunderbird" },
       properties = { tag = tags[1][4] } },
     { rule = { class = "Lightread" },
@@ -513,6 +514,8 @@ awful.rules.rules = {
       properties = { tag = tags[1][7] , floating=true } },
    --编程
     { rule = { class = "Gvim" },
+      properties = { tag = tags[1][8] , switchtotag = true } },
+    { rule = { class = "Eric5" },
       properties = { tag = tags[1][8] , switchtotag = true } },
     { rule = { class = "Qt-creator"},
       properties = { tag = tags[1][8] } },
