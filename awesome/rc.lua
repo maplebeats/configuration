@@ -11,6 +11,8 @@ require("menu")
 --libs
 require("lib")
 
+vicious = require("vicious")
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -133,6 +135,15 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
 -- }}}
 
+memwidget = widget({ type = "textbox" })
+vicious.register(memwidget, vicious.widgets.mem, 'M(<span color="#90ee90">$1%</span>)', 5)
+batwidget = widget({ type = "textbox" })
+vicious.register(batwidget, vicious.widgets.bat, 'B(<span color="#0000ff">$1$2%</span>)', 5, 'BAT1')
+cpuwidget = widget({ type = "textbox" })
+vicious.register(cpuwidget, vicious.widgets.cpu, 'C(<span color="#ffffff">$1%</span>)')
+--wifiwidget = widget({ type = "textbox" })
+--vicious.register(wifiwidget, vicious.widgets.wifi,"<span color='red'>${ssid}</span>")
+
 -- {{{2 Volume Control by 百合
 function volume (mode, widget)
   cardid  = 0
@@ -153,9 +164,9 @@ function volume (mode, widget)
  	--    volume = '♫' .. volume .. "<span color='red'>M</span>"
     --end
     if muted == "false" then
-      volume = '♫' .. volume .. "%"
+      volume = '♫(' .. volume .. "%)"
     else
-      volume = '♫' .. volume .. "<span color='red'>M</span>"
+      volume = '♫i(' .. volume .. "<span color='red'>M</span>)"
     end
     widget.text = volume
   elseif mode == "up" then
@@ -177,7 +188,7 @@ volume_clock:add_signal("timeout", function () volume("update", tb_volume) end)
 volume_clock:start()
 
 tb_volume = widget({ type = "textbox", name = "tb_volume", align = "right" })
-tb_volume.width = 45
+tb_volume.width = 50
 tb_volume:buttons(awful.util.table.join(
   awful.button({ }, 4, function () volume("up", tb_volume) end),
   awful.button({ }, 5, function () volume("down", tb_volume) end),
@@ -189,7 +200,7 @@ volume("update", tb_volume)
 --Caps Lock attention
 --function check_capslock(mode, widget)
         
-caps_lock = widget({ type = "textbox", name = "caps_lock" ,align = "right" })
+--caps_lock = widget({ type = "textbox", name = "caps_lock" ,align = "right" })
 
 -- {{{ Wibox
 -- Create a textclock widget
@@ -276,6 +287,10 @@ for s = 1, screen.count() do
         mytextclock,
         s == 1 and mysystray or nil,
         tb_volume,
+        memwidget,
+        batwidget,
+        cpuwidget,
+        --wifiwidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -284,9 +299,9 @@ end
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end)
-    --awful.button({ }, 4, awful.tag.viewnext),
-    --awful.button({ }, 5, awful.tag.viewprev)
+    awful.button({ }, 3, function () mymainmenu:toggle() end),
+    awful.button({ }, 4, awful.tag.viewnext),
+    awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -524,6 +539,9 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "gimp" },
       properties = { floating = true } },
+    --flash全屏
+    { rule ={ instance = "plugin-container" },
+      properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -536,7 +554,7 @@ autorunApps =
 { 
     "fcitx",
     "dropboxd",
-    "xfce4-power-manager",
+    --"xfce4-power-manager",
     "proxy.sh"
 }
 

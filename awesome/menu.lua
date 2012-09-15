@@ -39,6 +39,7 @@
 
  menue6f43c40ab1c07cd29e4e83e4ef6bf85 = {     {"CMake", "cmake-gui ", "/usr/share/pixmaps/CMakeSetup32.png" },
      {"Eric 5", "eric5", "/usr/share/pixmaps/eric.png" },
+     {"Glade", "glade ", "/usr/share//icons/hicolor/16x16/apps/glade.png" },
      {"Qt Assistant", "/usr/bin/assistant", "/usr/share//icons/hicolor/32x32/apps/assistant.png" },
      {"Qt Designer", "/usr/bin/designer", "/usr/share//icons/hicolor/128x128/apps/designer.png" },
      {"Qt Linguist", "/usr/bin/linguist", "/usr/share//icons/hicolor/16x16/apps/linguist.png" },
