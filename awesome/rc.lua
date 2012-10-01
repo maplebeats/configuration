@@ -116,16 +116,14 @@ mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesom
                                     { "Chromium", browser ,"/usr/share//icons/hicolor/16x16/apps/chromium.png" },
                                     { "Thunderbird", "thunderbird ", "/usr/share//icons/hicolor/16x16/apps/thunderbird.png" },
                                     { "Pidgin", "pidgin","/usr/share//icons/hicolor/16x16/apps/pidgin.png" },
+                                    { "&Osd", "osdlyrics","/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
+                                    { "&CherryTree", "cherrytree ", "///usr/share/icons/hicolor/scalable/apps/cherrytree.png" },
                                     { "&hotot" , "hotot-gtk3","/usr/share//icons/hicolor/22x22/apps/hotot.png" },
+                                    { "&dmusic" , "/home/maplebeats/Software/deepin/deepin-music-player-1+git201209111106/dmusic","/home/maplebeats/Software/deepin/deepin-music-player-1+git201209111106/debian/deepin-music-player.png" },
                                     { "&GoldenDict", "goldendict", "///usr/share/pixmaps/goldendict.png" },
                                     { "&Firefox", "firefox ", "/usr/share//icons/hicolor/16x16/apps/firefox.png" },
                                     { "&Thunar", "thunar","/usr/share//icons/hicolor/16x16/apps/Thunar.png" },
-                                    { "&Lightread", "lightread","///usr/share/lightread/media/lightread.png" },
                                     { "&VIM", "gvim -f ", "/usr/share/pixmaps/gvim.png" },
-                                    { "&Smplayer", "smplayer","/usr/share//icons/hicolor/16x16/apps/smplayer.png" },
-                                    { "&Osd", "osdlyrics","/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
-                                    { "&CherryTree", "cherrytree ", "///usr/share/icons/hicolor/scalable/apps/cherrytree.png" },
-                                    { "&Eric 5", "eric5", "/usr/share/pixmaps/eric.png" },
                                     { "&XBMC", "xbmc", "/usr/share//icons/hicolor/48x48/apps/xbmc.png" },
                                     { "电源(&P)", powermenu}
                                   }
@@ -138,11 +136,39 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 memwidget = widget({ type = "textbox" })
 vicious.register(memwidget, vicious.widgets.mem, 'M(<span color="#90ee90">$1%</span>)', 5)
 batwidget = widget({ type = "textbox" })
-vicious.register(batwidget, vicious.widgets.bat, 'B(<span color="#0000ff">$1$2%</span>)', 5, 'BAT1')
+vicious.register(batwidget, vicious.widgets.bat, 'B(<span color="#0000ff">$1$2%</span>)', 5, 'BAT0')
 cpuwidget = widget({ type = "textbox" })
 vicious.register(cpuwidget, vicious.widgets.cpu, 'C(<span color="#ffffff">$1%</span>)')
 --wifiwidget = widget({ type = "textbox" })
 --vicious.register(wifiwidget, vicious.widgets.wifi,"<span color='red'>${ssid}</span>")
+
+cputempwidget = widget({ type = "textbox" })
+cputempwidget_clock = timer({ timeout = 2 })
+cputempwidget_clock:add_signal("timeout", function()
+    local fc = ''
+    local bt = ''
+    local b = ''
+    local b = io.popen("acpi -b")
+    local f = io.popen("sensors")
+    for line in b:lines() do
+        bt = line:match('%d+%%')
+        if bt then break end
+    end
+    b:close()
+    for line in f:lines() do
+        fc = line:match('^Core 0:%s+[+-](%S+)')
+        if fc then break end
+    end
+    f:close()
+    if bt and tonumber(bt:match('%d+')) < 9 then
+        naughty.notify({title="警告", text="电池电量不足", preset=naughty.config.presets.critical})
+    end
+    if fc and tonumber(fc:match('%d+')) > 72 then
+        naughty.notify({title="警告", text="CPU 温度已超过 72℃！", preset=naughty.config.presets.critical})
+    end
+    cputempwidget.text = 'T(<span color="#add8e6">' .. fc .. '</span>)'
+end)
+cputempwidget_clock:start()
 
 -- {{{2 Volume Control by 百合
 function volume (mode, widget)
@@ -166,7 +192,7 @@ function volume (mode, widget)
     if muted == "false" then
       volume = '♫(' .. volume .. "%)"
     else
-      volume = '♫i(' .. volume .. "<span color='red'>M</span>)"
+      volume = '♫(' .. volume .. "<span color='red'>M</span>)"
     end
     widget.text = volume
   elseif mode == "up" then
@@ -188,7 +214,7 @@ volume_clock:add_signal("timeout", function () volume("update", tb_volume) end)
 volume_clock:start()
 
 tb_volume = widget({ type = "textbox", name = "tb_volume", align = "right" })
-tb_volume.width = 50
+tb_volume.width = 55
 tb_volume:buttons(awful.util.table.join(
   awful.button({ }, 4, function () volume("up", tb_volume) end),
   awful.button({ }, 5, function () volume("down", tb_volume) end),
@@ -290,6 +316,7 @@ for s = 1, screen.count() do
         memwidget,
         batwidget,
         cpuwidget,
+        cputempwidget,
         --wifiwidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -378,9 +405,9 @@ globalkeys = awful.util.table.join(
     awful.key({ }, 'XF86AudioMute', function () volume("mute", tb_volume) end),
     --截图
     awful.key({ }, "Print", function () 
-            awful.util.spawn("scrot '%m-%d-%s_%w.png' -e 'mv $f ~/Pictures/' ")
-            os.execute("sleep .5")
-            naughty.notify({title="截图", text="全屏截图已保存。"})
+            awful.util.spawn("deepin-scrot")
+           -- os.execute("sleep .5")
+           -- naughty.notify({title="截图", text="全屏截图已保存。"})
             end),
     -- {{{3 sdcv,活该过不了四级
     awful.key({ modkey }, "d", function ()
@@ -415,6 +442,7 @@ globalkeys = awful.util.table.join(
             awful.util.spawn("thunderbird") 
             end),
     awful.key({ }, 'XF86Calculator', function () awful.util.spawn("gvim -f") end)
+
 )
 
 clientkeys = awful.util.table.join(
@@ -508,9 +536,14 @@ awful.rules.rules = {
       properties = { tag = tags[1][5] ,floating = true } },
     { rule = { class = "Vlc" },
       properties = { tag = tags[1][5] , switchtotag = true } },
+    --deepin播放器
+    { rule ={ instance = "deepin.py" },
+      properties = { tag = tags[1][5], floating = true } },
     --聊天
     { rule = { class = "Pidgin" },
-      properties = { tag = tags[1][6] } },
+      properties = { tag = tags[1][6] ,switchtotag = true } },
+    { rule = { name= "Buddy list" },
+      properties = { tag = tags[1][6] ,floating = true } },
     { rule = { class = "Hotot" },
       properties = { tag = tags[1][3] ,switchtotag = true } },
     { rule = { class = "Thunderbird" },
@@ -518,6 +551,8 @@ awful.rules.rules = {
     { rule = { class = "Lightread" },
       properties = { tag = tags[1][4] } },
     { rule = { class = "Skype" },
+      properties = { tag = tags[1][6] , floating = true } },
+    { rule = { class = "Qtqq" },
       properties = { tag = tags[1][6] , floating = true } },
     --终端
     { rule = { class = "Terminal" },
@@ -542,6 +577,10 @@ awful.rules.rules = {
     --flash全屏
     { rule ={ instance = "plugin-container" },
       properties = { floating = true } },
+    { rule ={ instance = "Flashplayer" },
+      properties = { floating = true } },
+    { rule ={ name="deepinScrot.py" },
+      properties = { floating = true, callback = function(c) c.fullscreen() end } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -561,8 +600,7 @@ autorunApps =
 if autorun then
     for app = 1, #autorunApps do
         awful.util.spawn_with_shell(autorunApps[app])
-    end
-end
+    end end
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.

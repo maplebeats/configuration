@@ -3,13 +3,13 @@
 # Contributor : Thomas Baechler <thomas@archlinux.org>
 
 pkgname=nvidia-bumblebee
-pkgver=295.71
+pkgver=304.51
 _extramodules=extramodules-3.5-ck
 pkgrel=1
 pkgdesc="NVIDIA drivers for linux. Packaged for Bumblebee"
 arch=('i686' 'x86_64')
 url="http://www.nvidia.com/"
-depends=('linux-ck-corex>=3.5' 'linux-ck-corex<3.6' "nvidia-utils-bumblebee=${pkgver}")
+depends=('linux-ck>=3.5' 'linux-ck<3.6' "nvidia-utils-bumblebee=${pkgver}")
 provides=("nvidia=${pkgver}")
 makedepends=('linux-ck-headers>=3.5' 'linux-ck-headers<3.6')
 conflicts=('nvidia' 'nvidia-96xx' 'nvidia-173xx' 'dkms-nvidia')
@@ -19,8 +19,8 @@ options=(!strip)
 
 _arch='x86_64'
 _pkg="NVIDIA-Linux-${_arch}-${pkgver}-no-compat32"
-source=("NVIDIA-Linux-x86_64-295.71-no-compat32.run")
-md5sums=('820a6fc65e0eecf8e6f3ae7a0b96fc4f')
+source=("NVIDIA-Linux-x86_64-304.51-no-compat32.run")
+md5sums=('2ca10e05cd3b5d2a87caaaad9fd93c06')
 
 
 build() {

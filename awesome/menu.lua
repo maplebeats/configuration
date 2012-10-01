@@ -1,9 +1,9 @@
  menu98edb85b00d9527ad5acebe451b3fae6 = {     {"7-Zip FM", "7zFM", "/usr/share//icons/hicolor/32x32/apps/p7zip.png" },
      {"Archive Manager", "file-roller ", "/usr/share//icons/hicolor/16x16/apps/file-roller.png" },
-     {"CherryTree", "cherrytree ", "///usr/share/icons/hicolor/scalable/apps/cherrytree.png" },
+     {"CherryTree", "cherrytree "},
      {"Disks", "palimpsest", "/usr/share//icons/hicolor/16x16/apps/palimpsest.png" },
      {"Leafpad", "leafpad ", "/usr/share//icons/hicolor/16x16/apps/leafpad.png" },
-     {"Lightread", "lightread", "///usr/share/lightread/media/lightread.png" },
+     {"Lightread", "lightread", "/usr/share//icons/hicolor/128x128/apps/lightread.png" },
      {"Root Terminal", "gksu -l gnome-terminal", "/usr/share/pixmaps/gksu-root-terminal.png" },
      {"Vi IMproved", "gvim -f ", "/usr/share/pixmaps/gvim.png" },
  }
@@ -29,8 +29,13 @@
      {"Firefox", "firefox ", "/usr/share//icons/hicolor/16x16/apps/firefox.png" },
      {"Hotot Gtk3", "hotot-gtk3", "/usr/share//icons/hicolor/22x22/apps/hotot.png" },
      {"Pidgin Internet Messenger", "pidgin", "/usr/share//icons/hicolor/16x16/apps/pidgin.png" },
+     {"Qtqq", "qtqq", "///usr/share/Qtqq/resources/WebQQ.png" },
      {"Skype", "skype", "/usr/share//icons/hicolor/16x16/apps/skype.png" },
      {"Thunderbird", "thunderbird ", "/usr/share//icons/hicolor/16x16/apps/thunderbird.png" },
+     {"aLinkCreator", "alc", "/usr/share/pixmaps/alc.xpm" },
+     {"aMule", "amule", "/usr/share/pixmaps/amule.xpm" },
+     {"aMuleGUI", "amulegui", "/usr/share/pixmaps/amulegui.xpm" },
+     {"wxCas", "wxcas", "/usr/share/pixmaps/wxcas.xpm" },
      {"xmradio", "xmradio", "/usr/share//icons/hicolor/16x16/apps/xmradio.png" },
  }
 
@@ -48,6 +53,7 @@
 
  menu52dd1c847264a75f400961bfb4d1c849 = {     {"Audacious", "audacious ", "/usr/share//icons/hicolor/48x48/apps/audacious.png" },
      {"EasyTAG", "easytag ", "/usr/share/pixmaps/EasyTAG_icon.xpm" },
+     {"GNOME MPlayer", "gnome-mplayer ", "/usr/share//icons/hicolor/16x16/apps/gnome-mplayer.png" },
      {"Movie Player", "totem ", "/usr/share//icons/hicolor/16x16/apps/totem.png" },
      {"OSD Lyrics", "osdlyrics", "/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
      {"PulseAudio Volume Control", "pavucontrol", "/usr/share//icons/gnome/16x16/apps/multimedia-volume-control.png" },
