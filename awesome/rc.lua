@@ -134,11 +134,11 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- }}}
 
 memwidget = widget({ type = "textbox" })
-vicious.register(memwidget, vicious.widgets.mem, 'M(<span color="#90ee90">$1%</span>)', 5)
+vicious.register(memwidget, vicious.widgets.mem, '(<span color="#90ee90">$1%</span>)', 5)
 batwidget = widget({ type = "textbox" })
-vicious.register(batwidget, vicious.widgets.bat, 'B(<span color="#0000ff">$1$2%</span>)', 5, 'BAT0')
+vicious.register(batwidget, vicious.widgets.bat, '(<span color="#0000ff">$1$2%</span>)', 5, 'BAT0')
 cpuwidget = widget({ type = "textbox" })
-vicious.register(cpuwidget, vicious.widgets.cpu, 'C(<span color="#ffffff">$1%</span>)')
+vicious.register(cpuwidget, vicious.widgets.cpu, '(<span color="#ffffff">$1%</span>)')
 --wifiwidget = widget({ type = "textbox" })
 --vicious.register(wifiwidget, vicious.widgets.wifi,"<span color='red'>${ssid}</span>")
 
@@ -166,7 +166,7 @@ cputempwidget_clock:add_signal("timeout", function()
     if fc and tonumber(fc:match('%d+')) > 72 then
         naughty.notify({title="警告", text="CPU 温度已超过 72℃！", preset=naughty.config.presets.critical})
     end
-    cputempwidget.text = 'T(<span color="#add8e6">' .. fc .. '</span>)'
+    cputempwidget.text = '(<span color="#add8e6">' .. fc .. '</span>)'
 end)
 cputempwidget_clock:start()
 
@@ -214,7 +214,6 @@ volume_clock:add_signal("timeout", function () volume("update", tb_volume) end)
 volume_clock:start()
 
 tb_volume = widget({ type = "textbox", name = "tb_volume", align = "right" })
-tb_volume.width = 55
 tb_volume:buttons(awful.util.table.join(
   awful.button({ }, 4, function () volume("up", tb_volume) end),
   awful.button({ }, 5, function () volume("down", tb_volume) end),
@@ -223,10 +222,23 @@ tb_volume:buttons(awful.util.table.join(
 ))
 volume("update", tb_volume)
 
---Caps Lock attention
---function check_capslock(mode, widget)
+function capslock(widget)
+    os.execute("sleep .2")
+    local s = io.popen("xset -q")
+    local ss = ''
+    local sn = ''
+    for line in s:lines() do
+        ss = line:match('Caps Lock:%s*%l*%s*')
+        sn = line:match('Num Lock:%s*%l*%s*')
+    if ss and sn then break end
+    end
+    local sss = string.gsub(ss,"Caps Lock:%s*(%l*)%s*","%1")
+    local sns = string.gsub(sn,"Num Lock:%s*(%l*)%s*","%1")
+    widget.text = "(<span color='red'>" .. sss:upper() .."</span>)" .. "(<span color='#FFFF00'>" .. sns:upper() .. "</span>)"
+end
         
---caps_lock = widget({ type = "textbox", name = "caps_lock" ,align = "right" })
+caps_lock = widget({ type = "textbox", name = "caps_lock" ,align = "right" })
+capslock(caps_lock)
 
 -- {{{ Wibox
 -- Create a textclock widget
@@ -316,6 +328,7 @@ for s = 1, screen.count() do
         memwidget,
         batwidget,
         cpuwidget,
+        caps_lock,
         cputempwidget,
         --wifiwidget,
         mytasklist[s],
@@ -405,10 +418,11 @@ globalkeys = awful.util.table.join(
     awful.key({ }, 'XF86AudioMute', function () volume("mute", tb_volume) end),
     --截图
     awful.key({ }, "Print", function () 
-            awful.util.spawn("deepin-scrot")
-           -- os.execute("sleep .5")
-           -- naughty.notify({title="截图", text="全屏截图已保存。"})
-            end),
+                awful.util.spawn("deepin-scrot")
+                --os.execute("sleep 1")
+                --client.focus.fullscreen = true
+                --os.execute("sleep .5")
+                end),
     -- {{{3 sdcv,活该过不了四级
     awful.key({ modkey }, "d", function ()
     local f = io.popen("xsel -p")
@@ -441,8 +455,9 @@ globalkeys = awful.util.table.join(
             awful.tag.viewonly(tags[1][4])
             awful.util.spawn("thunderbird") 
             end),
-    awful.key({ }, 'XF86Calculator', function () awful.util.spawn("gvim -f") end)
-
+    awful.key({ }, 'XF86Calculator', function () awful.util.spawn("gvim -f") end),
+    awful.key({ }, 'Caps_Lock', function ()  capslock(caps_lock) end),
+    awful.key({ }, 'Num_Lock', function ()  capslock(caps_lock) end)
 )
 
 clientkeys = awful.util.table.join(
@@ -461,8 +476,7 @@ clientkeys = awful.util.table.join(
             -- minimized, since minimized clients can't have the focus.
             c.minimized = true
         end),
-    awful.key({ modkey,           }, "m",
-        function (c)
+    awful.key({ modkey,           }, "m", function (c)
             c.maximized_horizontal = not c.maximized_horizontal
             c.maximized_vertical   = not c.maximized_vertical
         end)
@@ -541,7 +555,7 @@ awful.rules.rules = {
       properties = { tag = tags[1][5], floating = true } },
     --聊天
     { rule = { class = "Pidgin" },
-      properties = { tag = tags[1][6] ,switchtotag = true } },
+      properties = { tag = tags[1][6] } },
     { rule = { name= "Buddy list" },
       properties = { tag = tags[1][6] ,floating = true } },
     { rule = { class = "Hotot" },
@@ -579,8 +593,8 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule ={ instance = "Flashplayer" },
       properties = { floating = true } },
-    { rule ={ name="deepinScrot.py" },
-      properties = { floating = true, callback = function(c) c.fullscreen() end } },
+    { rule ={ instance="deepinScrot.py" },
+      properties = { floating = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
