@@ -1,11 +1,20 @@
  menu98edb85b00d9527ad5acebe451b3fae6 = {     {"7-Zip FM", "7zFM", "/usr/share//icons/hicolor/32x32/apps/p7zip.png" },
      {"Archive Manager", "file-roller ", "/usr/share//icons/hicolor/16x16/apps/file-roller.png" },
      {"CherryTree", "cherrytree "},
-     {"Disks", "palimpsest", "/usr/share//icons/hicolor/16x16/apps/palimpsest.png" },
+     {"Disks", "gnome-disks", "/usr/share//icons/hicolor/16x16/apps/gnome-disks.png" },
      {"Leafpad", "leafpad ", "/usr/share//icons/hicolor/16x16/apps/leafpad.png" },
-     {"Lightread", "lightread", "/usr/share//icons/hicolor/128x128/apps/lightread.png" },
      {"Root Terminal", "gksu -l gnome-terminal", "/usr/share/pixmaps/gksu-root-terminal.png" },
      {"Vi IMproved", "gvim -f ", "/usr/share/pixmaps/gvim.png" },
+ }
+
+ menu0f4babd253d9665e51d81257d9e85b0c = {     {"Install Windows Software", "/opt/cxoffice/bin/cxinstaller", "/usr/local/share//icons/hicolor/16x16/apps/cxmenu-cxoffice-0-crossover.png" },
+     {"Manage Bottles", "/opt/cxoffice/bin/cxsetup", "/usr/local/share//icons/hicolor/16x16/apps/cxmenu-cxoffice-0-crossover.png" },
+     {"Preferences", "/opt/cxoffice/bin/cxprefs", "/usr/local/share//icons/hicolor/16x16/apps/cxmenu-cxoffice-0-crossover.png" },
+     {"Register and Unlock this Demo", "/opt/cxoffice/bin/cxregister", "/usr/local/share//icons/hicolor/48x48/apps/cxmenu-cxoffice-0-cxregister.png" },
+     {"Run a Windows Command", "/opt/cxoffice/bin/cxrun", "/usr/local/share//icons/hicolor/16x16/apps/cxmenu-cxoffice-0-cxrun.png" },
+     {"Terminate Windows Applications", "/opt/cxoffice/bin/cxreset", "/usr/local/share//icons/hicolor/48x48/apps/cxmenu-cxoffice-0-cxreset.png" },
+     {"Uninstall CrossOver Linux", "/opt/cxoffice/bin/cxuninstall", "/usr/local/share//icons/hicolor/48x48/apps/cxmenu-cxoffice-0-cxuninstall.png" },
+     {"User Documentation", "/opt/cxoffice/bin/launchurl file:///opt/cxoffice/doc/en/index.html", "/usr/local/share//icons/hicolor/48x48/apps/cxmenu-cxoffice-0-cxdoc.png" },
  }
 
  menude7a22a0c94aa64ba2449e520aa20c99 = {     {"GoldenDict", "goldendict", "///usr/share/pixmaps/goldendict.png" },
@@ -46,20 +55,20 @@
      {"Eric 5", "eric5", "/usr/share/pixmaps/eric.png" },
      {"Glade", "glade ", "/usr/share//icons/hicolor/16x16/apps/glade.png" },
      {"Qt Assistant", "/usr/bin/assistant", "/usr/share//icons/hicolor/32x32/apps/assistant.png" },
+     {"Qt Creator", "/usr/bin/qtcreator", "///usr/share/icons/hicolor/512x512/apps/QtProject-qtcreator.png" },
      {"Qt Designer", "/usr/bin/designer", "/usr/share//icons/hicolor/128x128/apps/designer.png" },
      {"Qt Linguist", "/usr/bin/linguist", "/usr/share//icons/hicolor/16x16/apps/linguist.png" },
-     {"Qt-Creator", "/usr/bin/qtcreator", "///usr/share/icons/hicolor/128x128/apps/qtcreator.png" },
  }
 
  menu52dd1c847264a75f400961bfb4d1c849 = {     {"Audacious", "audacious ", "/usr/share//icons/hicolor/48x48/apps/audacious.png" },
      {"EasyTAG", "easytag ", "/usr/share/pixmaps/EasyTAG_icon.xpm" },
      {"GNOME MPlayer", "gnome-mplayer ", "/usr/share//icons/hicolor/16x16/apps/gnome-mplayer.png" },
-     {"Movie Player", "totem ", "/usr/share//icons/hicolor/16x16/apps/totem.png" },
      {"OSD Lyrics", "osdlyrics", "/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
      {"PulseAudio Volume Control", "pavucontrol", "/usr/share//icons/gnome/16x16/apps/multimedia-volume-control.png" },
      {"QT V4L2 test Utility", "qv4l2", "/usr/share//icons/hicolor/16x16/apps/qv4l2.png" },
      {"SMPlayer", "smplayer ", "/usr/share//icons/hicolor/16x16/apps/smplayer.png" },
      {"VLC media player", "/usr/bin/vlc ", "/usr/share//icons/hicolor/16x16/apps/vlc.png" },
+     {"Videos", "totem ", "/usr/share//icons/hicolor/16x16/apps/totem.png" },
      {"XBMC Media Center", "xbmc", "/usr/share//icons/hicolor/48x48/apps/xbmc.png" },
      {"xmradio", "xmradio", "/usr/share//icons/hicolor/16x16/apps/xmradio.png" },
  }
@@ -76,6 +85,7 @@
  }
 
 xdgmenu = {    {"Accessories", menu98edb85b00d9527ad5acebe451b3fae6},
+    {"CrossOver", menu0f4babd253d9665e51d81257d9e85b0c},
     {"Education", menude7a22a0c94aa64ba2449e520aa20c99},
     {"Games", menu251bd8143891238ecedc306508e29017},
     {"Graphics", menud334dfcea59127bedfcdbe0a3ee7f494},

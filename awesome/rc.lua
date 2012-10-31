@@ -73,7 +73,7 @@ layouts =
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.a
-tags_name = { 1, 2, 3, 4, "5娱乐", "6聊天", "7网页", "8编辑", "9终端", "扯淡"}
+tags_name = { 1, "Y", "U", "I", "O娱乐", "P聊天", "7网页", "8编辑", "9终端", "扯淡"}
 tags_layout = {
   awful.layout.suit.tile,
   awful.layout.suit.tile,
@@ -108,8 +108,7 @@ myawesomemenu = {
 powermenu = { 
     {"关机(&D)","dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager org.freedesktop.ConsoleKit.Manager.Stop"},
     {"重启(&R)","dbus-send --system --print-reply  --dest=org.freedesktop.ConsoleKit /org/freedesktop/ConsoleKit/Manager  org.freedesktop.ConsoleKit.Manager.Restart"},
-    {"挂起(&S)","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower org.freedesktop.UPower.Suspend"},
-    {"休眠","dbus-send --system --print-reply  --dest=org.freedesktop.UPower /org/freedesktop/UPower  org.freedesktop.UPower.Hibernate"}
+    {"挂起(&S)","systemctl suspend"}
 }
 mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesome_icon },
                                     { "应用(&M)", xdgmenu },
@@ -119,6 +118,7 @@ mymainmenu = awful.menu({ items = { { "Awesome", myawesomemenu, beautiful.awesom
                                     { "&Osd", "osdlyrics","/usr/share//icons/hicolor/64x64/apps/osdlyrics.png" },
                                     { "&CherryTree", "cherrytree ", "///usr/share/icons/hicolor/scalable/apps/cherrytree.png" },
                                     { "&hotot" , "hotot-gtk3","/usr/share//icons/hicolor/22x22/apps/hotot.png" },
+                                    { "&WPS" , "/home/maplebeats/Software/wps-office/wps","/usr/share//icons/hicolor/22x22/apps/evince.png" },
                                     { "&dmusic" , "/home/maplebeats/Software/deepin/deepin-music-player-1+git201209111106/dmusic","/home/maplebeats/Software/deepin/deepin-music-player-1+git201209111106/debian/deepin-music-player.png" },
                                     { "&GoldenDict", "goldendict", "///usr/share/pixmaps/goldendict.png" },
                                     { "&Firefox", "firefox ", "/usr/share//icons/hicolor/16x16/apps/firefox.png" },
@@ -134,16 +134,16 @@ mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
 -- }}}
 
 memwidget = widget({ type = "textbox" })
-vicious.register(memwidget, vicious.widgets.mem, '(<span color="#90ee90">$1%</span>)', 5)
+vicious.register(memwidget, vicious.widgets.mem, '<span color="#90ee90">$1%</span>', 5)
 batwidget = widget({ type = "textbox" })
-vicious.register(batwidget, vicious.widgets.bat, '(<span color="#0000ff">$1$2%</span>)', 5, 'BAT0')
+vicious.register(batwidget, vicious.widgets.bat, '<span color="#0000ff">$1$2%</span>', 5, 'BAT0')
 cpuwidget = widget({ type = "textbox" })
-vicious.register(cpuwidget, vicious.widgets.cpu, '(<span color="#ffffff">$1%</span>)')
+vicious.register(cpuwidget, vicious.widgets.cpu, '<span color="#ffffff">$1%</span>')
 --wifiwidget = widget({ type = "textbox" })
 --vicious.register(wifiwidget, vicious.widgets.wifi,"<span color='red'>${ssid}</span>")
 
 cputempwidget = widget({ type = "textbox" })
-cputempwidget_clock = timer({ timeout = 2 })
+cputempwidget_clock = timer({ timeout = 10 })
 cputempwidget_clock:add_signal("timeout", function()
     local fc = ''
     local bt = ''
@@ -163,10 +163,10 @@ cputempwidget_clock:add_signal("timeout", function()
     if bt and tonumber(bt:match('%d+')) < 9 then
         naughty.notify({title="警告", text="电池电量不足", preset=naughty.config.presets.critical})
     end
-    if fc and tonumber(fc:match('%d+')) > 72 then
+    if fc and tonumber(fc:match('%d+')) > 79 then
         naughty.notify({title="警告", text="CPU 温度已超过 72℃！", preset=naughty.config.presets.critical})
     end
-    cputempwidget.text = '(<span color="#add8e6">' .. fc .. '</span>)'
+    cputempwidget.text = '<span color="#add8e6">' .. fc .. '</span>'
 end)
 cputempwidget_clock:start()
 
@@ -190,9 +190,9 @@ function volume (mode, widget)
  	--    volume = '♫' .. volume .. "<span color='red'>M</span>"
     --end
     if muted == "false" then
-      volume = '♫(' .. volume .. "%)"
+      volume = '♫' .. volume .. "%"
     else
-      volume = '♫(' .. volume .. "<span color='red'>M</span>)"
+      volume = '♫' .. volume .. "<span color='red'>M</span>"
     end
     widget.text = volume
   elseif mode == "up" then
@@ -230,15 +230,19 @@ function capslock(widget)
     for line in s:lines() do
         ss = line:match('Caps Lock:%s*%l*%s*')
         sn = line:match('Num Lock:%s*%l*%s*')
-    if ss and sn then break end
+        if ss and sn then break end
     end
     local sss = string.gsub(ss,"Caps Lock:%s*(%l*)%s*","%1")
     local sns = string.gsub(sn,"Num Lock:%s*(%l*)%s*","%1")
-    widget.text = "(<span color='red'>" .. sss:upper() .."</span>)" .. "(<span color='#FFFF00'>" .. sns:upper() .. "</span>)"
+    widget.text = "<span color='red'>" .. sss:upper() .."</span>" .. "<span color='#FFFF00'>" .. sns:upper() .. "</span>"
 end
         
 caps_lock = widget({ type = "textbox", name = "caps_lock" ,align = "right" })
 capslock(caps_lock)
+
+--分割符
+split = widget({ type = "textbox"})
+split.text = "<span color='green'>^</span>"
 
 -- {{{ Wibox
 -- Create a textclock widget
@@ -254,12 +258,12 @@ mylayoutbox = {}
 mytaglist = {}
 mytaglist.buttons = awful.util.table.join(
                     awful.button({ }, 1, awful.tag.viewonly),
-                    awful.button({ modkey }, 1, awful.client.movetotag),
-                    awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, awful.client.toggletag),
-                    awful.button({ }, 4, awful.tag.viewnext),
-                    awful.button({ }, 5, awful.tag.viewprev)
-                    )
+--                    awful.button({ modkey }, 1, awful.client.movetotag),
+                    awful.button({ }, 3, awful.tag.viewtoggle)
+--                    awful.button({ modkey }, 3, awful.client.toggletag),
+--                    awful.button({ }, 4, awful.tag.viewnext),
+--                    awful.button({ }, 5, awful.tag.viewprev)
+                   )
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
@@ -316,20 +320,26 @@ for s = 1, screen.count() do
     -- Add widgets to the wibox - order matters
     mywibox[s].widgets = {
         {
-            mylauncher,
+--          mylauncher,
             mytaglist[s],
             mypromptbox[s],
             layout = awful.widget.layout.horizontal.leftright
         },
-        mylayoutbox[s],
+        --mylayoutbox[s],
         mytextclock,
         s == 1 and mysystray or nil,
-        tb_volume,
-        memwidget,
+        split,
         batwidget,
+        split,
+        tb_volume,
+        split,
+        memwidget,
+        split,
         cpuwidget,
-        caps_lock,
+        split,
         cputempwidget,
+        split,
+        caps_lock,
         --wifiwidget,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -339,9 +349,9 @@ end
 
 -- {{{ Mouse bindings
 root.buttons(awful.util.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
-    awful.button({ }, 4, awful.tag.viewnext),
-    awful.button({ }, 5, awful.tag.viewprev)
+   awful.button({ }, 3, function () mymainmenu:toggle() end),
+   awful.button({ }, 4, awful.tag.viewnext),
+  awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
 
@@ -376,6 +386,12 @@ globalkeys = awful.util.table.join(
                 client.focus:raise()
             end
         end),
+    --绑定tag{1..6}
+    awful.key({ modkey,    }, "y", function () awful.tag.viewonly(tags[1][2])    end),
+    awful.key({ modkey,    }, "u", function () awful.tag.viewonly(tags[1][3])    end),
+    awful.key({ modkey,    }, "i", function () awful.tag.viewonly(tags[1][4])    end),
+    awful.key({ modkey,    }, "o", function () awful.tag.viewonly(tags[1][5])   end),
+    awful.key({ modkey,    }, "p", function () awful.tag.viewonly(tags[1][6])   end),
 
     -- Standard program
         -- 找一个终端来XX
@@ -455,7 +471,8 @@ globalkeys = awful.util.table.join(
             awful.tag.viewonly(tags[1][4])
             awful.util.spawn("thunderbird") 
             end),
-    awful.key({ }, 'XF86Calculator', function () awful.util.spawn("gvim -f") end),
+    awful.key({ }, 'XF86Calculator', function () awful.util.spawn("thunar") end),
+    awful.key({ }, 'XF86PowerOff', function () awful.util.spawn("xset dpms force off") end),
     awful.key({ }, 'Caps_Lock', function ()  capslock(caps_lock) end),
     awful.key({ }, 'Num_Lock', function ()  capslock(caps_lock) end)
 )
@@ -556,8 +573,8 @@ awful.rules.rules = {
     --聊天
     { rule = { class = "Pidgin" },
       properties = { tag = tags[1][6] } },
-    { rule = { name= "Buddy list" },
-      properties = { tag = tags[1][6] ,floating = true } },
+    { rule = { name= "Buddy List" },
+      properties = { floating = true} },
     { rule = { class = "Hotot" },
       properties = { tag = tags[1][3] ,switchtotag = true } },
     { rule = { class = "Thunderbird" },
@@ -577,8 +594,8 @@ awful.rules.rules = {
     { rule = { class = "Firefox"},
       properties = { tag = tags[1][7] , floating=true } },
    --编程
-    { rule = { class = "Gvim" },
-      properties = { tag = tags[1][8] , switchtotag = true } },
+   --{ rule = { class = "Gvim" },
+   --properties = { tag = tags[1][8] , switchtotag = true } },
     { rule = { class = "Eric5" },
       properties = { tag = tags[1][8] , switchtotag = true } },
     { rule = { class = "Qt-creator"},
@@ -593,8 +610,8 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule ={ instance = "Flashplayer" },
       properties = { floating = true } },
-    { rule ={ instance="deepinScrot.py" },
-      properties = { floating = true } },
+    { rule ={ class="DeepinScrot.py" },
+      properties = { floating = true ,fullscreen = true } },
     -- Set Firefox to always map on tags number 2 of screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { tag = tags[1][2] } },
@@ -607,7 +624,7 @@ autorunApps =
 { 
     "fcitx",
     "dropboxd",
-    --"xfce4-power-manager",
+    "thunar --daemon",
     "proxy.sh"
 }
 
