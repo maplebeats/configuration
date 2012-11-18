@@ -1,14 +1,15 @@
 PROMPT='%{[31m%}ef>%{[m%}'
 
 case $TERM in
-(xterm*)
-function precmd () { print -Pn "\e]0;%~\a" }
-;;
+    (xterm*)
+        function precmd () { print -Pn "\e]0;%~\a" }
+    ;;
 esac
 
 [[ ! -o login ]] && source /etc/zsh/zprofile
 
 export PATH=$PATH:/home/maplebeats/Scripts:/home/maplebeats/.gem/ruby/1.9.1/bin:/usr/share/perl5/core_perl/:/usr/share/perl5/vendor_perl/
+export PYTHONPATH=/usr/local/lib/python3.2/site-packages/:/home/maplebeats/pylib
 export EDITOR="vim"
 
 # number of lines kept in history
@@ -81,5 +82,55 @@ alias ls='ls -F --color=auto'
 alias ll='ls -l'
 alias grep='grep --color=auto'
 alias git-c="git commit -a -m"
-alias menu="xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu > ~/.config/awesome/menu.lua && sed -i 's/svg/png/' ~/.config/awesome/menu.lua"
-alias sys='systemctl'
+alias menu="xdg_menu --format awesome --root-menu /etc/xdg/menus/arch-applications.menu > ~/.config/awesome/menu.lua && sed -i -r -e 's/\.svg/\.png/' -e 's/\.ico/\.png/' ~/.config/awesome/menu.lua"
+alias sys='sudo systemctl'
+alias up='yaourt -Syua'
+alias py='python3'
+alias py2='python2'
+alias py3='python3'
+alias ipy='ipython'
+alias ipy2='ipython2'
+alias op='xdg-open'
+
+function dooloo () { 
+    curl -s dooloo.info |  awk '
+    BEGIN { RS=">\n"; FS="[\"><]|=\x27" } 
+    /title=/ {
+        sub("/", "http://dooloo.info/", $3); 
+        print "[\033[32m"$7"\033[39m]\n\033[36m"$3"\033[39m\n"
+    }
+'; }
+function reload() {
+    source ~/.zshrc
+}
+alias rl='reload'
+
+function cdd(){
+    cd $1 && ll $PWD
+    print '\033[33mPWD:'"\033[32m"$PWD
+}
+
+function j(){
+    if [ ! "$#" -eq 1 ]; then
+        echo 'Args error'
+        return 1
+    fi 
+    case "$1" in 
+        "$HOME")
+            cdd ~
+            ;;
+        "v")
+            cdd ~/Videos
+            ;;
+        "s")
+            cdd ~/Software
+            ;;
+        "w")
+            cdd ~/Works
+            ;;
+        *)
+            dir=`autojump "$1"` && cdd $dir || echo 'No such dir';return 1;
+            ;;
+    esac
+}
+
