@@ -1,86 +1,83 @@
-syntax on
-filetype plugin on
-filetype plugin indent on
-set cindent
-set expandtab
-set tabstop=4
-set shiftwidth=4
 set number
-set autoindent
-set paste
-set backspace=indent,eol,start
-set textwidth=0
-set ruler
-set wildmenu
-set commentstring=\ #\ %s
-set foldlevel=0
-set clipboard+=unnamed
 set encoding=utf-8
 set fileencodings=utf-8,chinese,latin-1,so-2022-jp,sjis
-
-set grepprg=grep\ -nH\ $*
-let g:tex_flavor = "latex"
+set autoindent
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set smarttab
+set wrap
+set backup " Enable backup
+set backupdir=~/.vim/backup " Set backup directory
+set directory=~/.vim/swap,/tmp " Set swap file directory
+set mouse=a " 鼠标可用
+set pastetoggle=<F12> " 粘贴模式切换 
 
 let g:pydiction_location ='/home/maplebeats/.vim/tools/pydiction/complete-dict'
 let g:pydiction_menu_height = 20
 
-let b:javascript_fold=1
-let javascript_enable_domhtmlcss=1
+"vundle
+set nocompatible " be iMproved
+filetype off " required!
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+Bundle 'gmarik/vundle'
+Bundle 'The-NERD-tree'
+
+syntax on
+filetype on
+filetype plugin on
+filetype plugin indent on " vundle required
+
+au FileType python set omnifunc=python3complete#Complete
+au FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+"au FileType html set omnifunc = htmlcomplete#CompleteTags
+"au FileType css set omnifunc = csscomplete#CompleteCSS
+au FileType txt set setlocal spell spelllang=en_us
 au BufRead,BufNewFile *.js set ft=javascript.jquery
 au BufRead,BufNewFile *.js set syntax=jquery
 
-autocmd FileType python set omnifunc=pythoncomplete#Complete  
+"search
+set magic " Enable magic matching
+set showmatch " Show matching bracets
+set hlsearch " Highlight search things
+set smartcase " Ignore case when searching
+set ignorecase
 
-"进行版权声明的设置
-"添加或更新头
-map <F4> :call TitleDet()<cr>'s
-function AddTitle()
-    call append(0,"/*============================================
-    =================================")
-    call append(1,"#")
-    call append(2,"# Author: maplebeats")
-    call append(3,"#")
-    call append(4,"# gtalk/mail: maplebeats@gmail.com")
-    call append(5,"#")
-    call append(6,"# Last modified: ".strftime("%Y-%m-%d %H:%M"))
-    call append(7,"#")
-    call append(8,"# Filename: ".expand("%:t"))
-    call append(9,"#")
-    call append(10,"# Description: ")
-    call append(11,"#")
-    call append(12,"===========================================
-    ==================================*/")
-    echohl WarningMsg | echo "Successful in adding the copyright." | echohl None
-endf
-"更新最近修改时间和文件名
-function UpdateTitle()
-    normal m'
-    execute '/# *Last modified:/s@:.*$@\=strftime(":\t%Y-%m-%d %H:%M")@'
-    normal ''
-    normal mk
-    execute '/# *Filename:/s@:.*$@\=":\t\t".expand("%:t")@'
-    execute "noh"
-    normal 'k
-    echohl WarningMsg | echo "Successful in updating the copy right." | echohl None
+" map
+" <FN>
+map <F5> :call ScriptsRun()<CR>
+nnoremap <silent> <F9> :NERDTreeToggle<CR>
+function! ScriptsRun()
+    exec "w"
+    if &filetype == 'sh'
+        exec "!sh %"
+    elseif &filetype == 'python'
+        exec "!python3 %"
+    elseif &filetype == 'html'
+        exec "!xdg-open %"
+    endif
 endfunction
-"判断前10行代码里面，是否有Last modified这个单词，
-"如果没有的话，代表没有添加过作者信息，需要新添加；
-"如果有的话，那么只需要更新即可
-function TitleDet()
-    let n=1
-    "默认为添加
-    while n < 10
-        let line = getline(n)
-        if line =~ '^\#\s*\S*Last\smodified:\S*.*$'
-            call UpdateTitle()
-            return
-        endif
-        let n = n + 1
-    endwhile
-    call AddTitle()
-endfunction
-set backup " Enable backup
-set backupdir=~/.vim/backup " Set backup directory
-set directory=~/.vim/swap,/tmp " Set swap file directory
+
+"tabs
+nnoremap tp :tabprevious<CR>
+nnoremap tn :tabnext<CR>
+nnoremap to :tabnew<CR>
+nnoremap tc :tabclose<CR>
+
+nmap <silent> <C-k> <C-W><C-k>
+nmap <silent> <C-j> <C-W><C-j>
+nmap <silent> <C-h> <C-W><C-h>
+nmap <silent> <C-l> <C-W><C-l>
+
+"disable direction keys
+map <UP> <NOP>
+map <DOWN> <NOP>
+map <LEFT> <NOP>
+map <RIGHT> <NOP>
+inoremap <UP> <NOP>
+inoremap <DOWN> <NOP>
+inoremap <LEFT> <NOP>
+inoremap <RIGHt> <NOP>

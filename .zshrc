@@ -91,6 +91,9 @@ alias py3='python3'
 alias ipy='ipython'
 alias ipy2='ipython2'
 alias op='xdg-open'
+alias pacman='pacman-color'
+alias y='ydcv'
+alias s='sdcv'
 
 function dooloo () { 
     curl -s dooloo.info |  awk '
@@ -133,4 +136,4 @@ function j(){
             ;;
     esac
 }
-
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
