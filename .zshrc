@@ -94,7 +94,6 @@ alias op='xdg-open'
 alias pacman='pacman-color'
 alias y='ydcv'
 alias s='sdcv'
-
 function dooloo () { 
     curl -s dooloo.info |  awk '
     BEGIN { RS=">\n"; FS="[\"><]|=\x27" } 
