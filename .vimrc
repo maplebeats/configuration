@@ -13,7 +13,7 @@ set wrap
 
 set backup " Enable backup
 set backupdir=~/.vim/backup " Set backup directory
-set directory=~/.vim/swap,/tmp " Set swap file directory
+set directory=/tmp,~/.vim/swap " Set swap file directory
 
 set mouse=a " 鼠标可用
 set selection=exclusive
@@ -27,7 +27,7 @@ set guioptions=acit
 set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
 set laststatus=2
 set ruler
-set iskeyword+=_,$,@,%,#,-  " 带有如下符号的单词不要被换行分割
+set iskeyword+=_,$,@,%,#,-  " 带有符号的单词不要被换行分割
 set wildmenu
 
 "vundle
@@ -100,8 +100,10 @@ function! ScriptsRun()
         exec "!xdg-open %"
     elseif &filetype == 'c'
         exec "w"
-        exec "!g++ % -o %<"
-        exec "! ./%<"
+        exec "!gcc % -o %<"
+        exec "!./%<"
+    elseif &filetype == 'javascript.jquery'
+        exec "!gjs %"
     endif
 endfunction
 
@@ -158,6 +160,3 @@ map <silent> <leader>ss :source ~/.vimrc<cr>
 map <silent> <leader>ee :e ~/.vimrc<cr>
 "When .vimrc is edited, reload it
 autocmd! bufwritepost .vimrc source ~/.vimrc
-
-" jedi-vim
-"let g:jedi#autocompletion_command = "<A-Space>"
