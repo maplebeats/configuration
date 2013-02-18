@@ -1,6 +1,8 @@
 set number
+
 set encoding=utf-8
-set fileencodings=utf-8,chinese,latin-1,so-2022-jp,sjis
+set fileencodings=utf-8,ucs-bom,shift-jis,gb18030,gbk,gb2312,cp936
+
 set autoindent
 set smartindent
 set tabstop=4
@@ -8,14 +10,25 @@ set shiftwidth=4
 set expandtab
 set smarttab
 set wrap
+
 set backup " Enable backup
 set backupdir=~/.vim/backup " Set backup directory
 set directory=~/.vim/swap,/tmp " Set swap file directory
+
 set mouse=a " 鼠标可用
+set selection=exclusive
+set selectmode=mouse,key
+
 set guioptions-=T "remove toolsbar
 set guioptions-=m "remove menubar
 set guioptions=acit
+
 "set foldmethod=indent "flod
+set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [POS=%l,%v][%p%%]\ %{strftime(\"%d/%m/%y\ -\ %H:%M\")}
+set laststatus=2
+set ruler
+set iskeyword+=_,$,@,%,#,-  " 带有如下符号的单词不要被换行分割
+set wildmenu
 
 "vundle
 set nocompatible " be iMproved
@@ -85,6 +98,10 @@ function! ScriptsRun()
         exec "!python %"
     elseif &filetype == 'html'
         exec "!xdg-open %"
+    elseif &filetype == 'c'
+        exec "w"
+        exec "!g++ % -o %<"
+        exec "! ./%<"
     endif
 endfunction
 
