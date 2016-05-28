@@ -1,0 +1,14 @@
+[Unit]
+Description=aria2c rpc
+After=network.target
+
+[Service]
+
+ExecStart=/usr/bin/aria2c --enable-rpc --rpc-listen-all
+ExecReload=/bin/kill -HUP $MAINPID
+StandardOutput=syslog
+User=tiantian
+WorkingDirectory=/home/tiantian/download
+
+[Install]
+WantedBy=multi-user.target
